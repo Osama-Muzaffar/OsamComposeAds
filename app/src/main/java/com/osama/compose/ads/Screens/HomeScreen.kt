@@ -1,0 +1,78 @@
+package com.osama.compose.ads.Screens
+
+import android.content.Intent
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import com.compose.osamcomposeads.Ads.MyNativeAdAdmobSmall
+import com.compose.osamcomposeads.Ads.OsamAdsHelper
+import com.compose.osamcomposeads.Ads.OsamNativeAdState
+import com.compose.osamcomposeads.Ads.ShowInterstitialAd
+import com.osama.compose.ads.SecondActivity
+
+@Composable
+fun HomeScreen(modifier: Modifier = Modifier,
+               onSecond: () -> Unit={}) {
+    val context= LocalContext.current
+    OsamAdsHelper.loadIntersialad(context,"ca-app-pub-3940256099942544/1033173712")
+    Scaffold(modifier = Modifier.fillMaxSize(),
+        bottomBar = {
+            val nativeAd= OsamNativeAdState(context = context,
+                adUnitId = "ca-app-pub-3940256099942544/2247696110")
+
+//                        OsamAdmobBanner(bannerId = "ca-app-pub-3940256099942544/6300978111")
+            MyNativeAdAdmobSmall(loadedAd = nativeAd)
+
+        }) { innerPadding ->
+
+        val nativeAd= OsamNativeAdState(context = context,
+            adUnitId = "ca-app-pub-3940256099942544/2247696110")
+
+        var shouldShowAd by remember { mutableStateOf(false) }
+
+        if (shouldShowAd) {
+            ShowInterstitialAd(
+                context = context,
+                onDismissed = {
+                    shouldShowAd = false
+                    onSecond()
+                }
+            )
+        }
+
+
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .padding(innerPadding)) {
+            Box(modifier = Modifier.weight(1f)){
+                Column (Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally){
+
+                    Button(onClick = {
+                        shouldShowAd=true
+                    }) {
+                        Text(text = "Show Intersital")
+                    }
+
+                }
+            }
+
+//                        MyNativeAdAdmobSmall(loadedAd = nativeAd)
+
+        }
+    }
+}
