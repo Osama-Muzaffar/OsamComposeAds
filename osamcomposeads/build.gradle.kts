@@ -1,3 +1,5 @@
+import org.apache.tools.ant.util.JavaEnvUtils.VERSION_11
+
 plugins {
 //    alias(libs.plugins.android.library)
     id("com.android.library")
@@ -32,8 +34,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
         jvmTarget = "1.8"
@@ -50,16 +52,7 @@ android {
         }
     }
 }
-publishing {
-    publications {
-        create<MavenPublication>("mavenJava") {
-            from(components["release"])
-            groupId = "com.github.Osama-Muzaffar"
-            artifactId = "osamcomposeads"
-            version = "0.0.3"
-        }
-    }
-}
+
 
 dependencies {
 
