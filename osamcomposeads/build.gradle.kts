@@ -50,6 +50,16 @@ android {
         }
     }
 }
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["release"])
+            groupId = "com.github.Osama-Muzaffar"
+            artifactId = "osamcomposeads"
+            version = "0.0.3"
+        }
+    }
+}
 
 dependencies {
 
