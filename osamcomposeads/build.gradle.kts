@@ -58,7 +58,7 @@ publishing {
 //            from(components["release"])
             groupId = "com.github.Osama-Muzaffar"
             artifactId = "osamcomposeads"
-            version = "0.0.8"
+            version = "0.0.11"
         }
     }
 }
