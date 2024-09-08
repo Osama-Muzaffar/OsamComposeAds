@@ -67,7 +67,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "com.github.Osama-Muzaffar"
             artifactId = "osamcomposeads"
-            version = "0.0.12"
+            version = "1.0.0"
 
             afterEvaluate {
                 from(components["release"])

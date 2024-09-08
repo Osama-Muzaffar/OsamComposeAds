@@ -52,7 +52,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
 @Composable
-fun MyNativeAdAdmobSmall(modifier: Modifier = Modifier, loadedAd: NativeAd?) {
+fun MyNativeAdAdmobMedium(modifier: Modifier = Modifier, loadedAd: NativeAd?) {
     AndroidView(
         modifier = modifier.padding(start = 4.dp, top = 8.dp, end = 4.dp, bottom = 4.dp),
         factory = { context ->

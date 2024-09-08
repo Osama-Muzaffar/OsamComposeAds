@@ -1,6 +1,5 @@
 package com.osama.compose.ads.Screens
 
-import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,11 +16,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import com.compose.osamcomposeads.Ads.MyNativeAdAdmobSmall
+import com.compose.osamcomposeads.Ads.MyNativeAdAdmobMedium
 import com.compose.osamcomposeads.Ads.OsamAdsHelper
 import com.compose.osamcomposeads.Ads.OsamNativeAdState
 import com.compose.osamcomposeads.Ads.ShowInterstitialAd
-import com.osama.compose.ads.SecondActivity
 
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier,
@@ -34,7 +32,7 @@ fun HomeScreen(modifier: Modifier = Modifier,
                 adUnitId = "ca-app-pub-3940256099942544/2247696110")
 
 //                        OsamAdmobBanner(bannerId = "ca-app-pub-3940256099942544/6300978111")
-            MyNativeAdAdmobSmall(loadedAd = nativeAd)
+            MyNativeAdAdmobMedium(loadedAd = nativeAd)
 
         }) { innerPadding ->
 
