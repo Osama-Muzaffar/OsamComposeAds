@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.compose.osamcomposeads.Ads.OsamAdmobBanner
 import com.compose.osamcomposeads.Ads.ShowInterstitialAd
+import com.osama.compose.ads.Utils.cachedConfig
 
 @Composable
 fun SecondScreen(modifier: Modifier = Modifier) {
@@ -26,7 +27,9 @@ fun SecondScreen(modifier: Modifier = Modifier) {
 //                        val nativeAd= OsamNativeAdState(context = context,
 //                            adUnitId = "ca-app-pub-3940256099942544/2247696110")
 
-            OsamAdmobBanner(bannerId = "ca-app-pub-3940256099942544/6300978111")
+            val bannerConfig = if (cachedConfig!=null) {cachedConfig!!.test_banner} else {true}
+            OsamAdmobBanner(bannerId = "ca-app-pub-3940256099942544/6300978111",
+                remoteKey = bannerConfig)
 //                        MyNativeAdAdmobSmall(loadedAd = nativeAd)
 
         }) { innerPadding ->

@@ -100,7 +100,8 @@ fun OsamAdmobBanner(
     modifier: Modifier = Modifier,
     bannerId: String,
     onAdLoaded: ()-> Unit = { "" },
-    onAdFailedToLoad: (LoadAdError)-> Unit = { "" }
+    onAdFailedToLoad: (LoadAdError)-> Unit = { "" },
+    remoteKey:Boolean = true
 ) {
     var isBannerLoaded by remember { mutableStateOf(false) }
     val context = LocalContext.current
@@ -113,44 +114,47 @@ fun OsamAdmobBanner(
 
     val adaptiveAdSize = AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(context, screenWidthDp)
 
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(adaptiveAdSize.height.dp)
-    ) {
-        if (!isBannerLoaded) {
-            ShimmerBox(
-                modifier = Modifier.fillMaxSize()
-            )
-        }
+    if(remoteKey) {
+        Box(
+            modifier = modifier
+                .fillMaxWidth()
+                .height(adaptiveAdSize.height.dp)
+        ) {
+            if (!isBannerLoaded) {
+                ShimmerBox(
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
 
-        AndroidView(
-            modifier = Modifier.fillMaxSize(),
-            factory = { context ->
-                AdView(context).apply {
-                    setAdSize(adaptiveAdSize)
-                    adUnitId = bannerId
-                    adListener = object : AdListener() {
-                        override fun onAdLoaded() {
-                            onAdLoaded()
-                            Log.d("tagBannerAd", "onAdLoaded: ")
-                            Handler(Looper.getMainLooper()).post {
-                                isBannerLoaded = true
+            AndroidView(
+                modifier = Modifier.fillMaxSize(),
+                factory = { context ->
+                    AdView(context).apply {
+                        setAdSize(adaptiveAdSize)
+                        adUnitId = bannerId
+                        adListener = object : AdListener() {
+                            override fun onAdLoaded() {
+                                onAdLoaded()
+                                Log.d("tagBannerAd", "onAdLoaded: ")
+                                Handler(Looper.getMainLooper()).post {
+                                    isBannerLoaded = true
+                                }
+                            }
+
+                            override fun onAdFailedToLoad(error: LoadAdError) {
+                                Log.d("tagBannerAd", "onAdFailedToLoad: $error")
+                                onAdFailedToLoad(error)
                             }
                         }
-
-                        override fun onAdFailedToLoad(error: LoadAdError) {
-                            Log.d("tagBannerAd", "onAdFailedToLoad: $error")
-                            onAdFailedToLoad(error)
-                        }
+                        loadAd(AdRequest.Builder().build())
                     }
-                    loadAd(AdRequest.Builder().build())
+                },
+                update = { adView ->
+                    adView.visibility =
+                        if (isBannerLoaded) android.view.View.VISIBLE else android.view.View.GONE
                 }
-            },
-            update = { adView ->
-                adView.visibility = if (isBannerLoaded) android.view.View.VISIBLE else android.view.View.GONE
-            }
-        )
+            )
+        }
     }
 }
 

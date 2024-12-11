@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "957126242602",
+    "project_id": "osamcomposeads",
+    "storage_bucket": "osamcomposeads.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:957126242602:android:426e8929b04417ee22ae53",
+        "android_client_info": {
+          "package_name": "com.osama.compose.ads"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHnrCr8AXUEF8ftGf0zcG4r0f7N_YJ2pU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
