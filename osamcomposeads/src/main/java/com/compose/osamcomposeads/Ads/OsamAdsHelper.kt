@@ -36,6 +36,8 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.compose.osamcomposeads.Ads.OsamAdsHelper.Companion.intersialAd
+import com.compose.osamcomposeads.Ads.OsamAdsHelper.Companion.isloading
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
@@ -191,7 +193,7 @@ public class OsamAdsHelper{
     companion object{
         var intersialAd: InterstitialAd? = null
 
-        private var isloading = false
+        var isloading = false
         public fun loadIntersialad(context: Context, intersialId: String,
                                    onAdLoaded: () -> Unit={},
                                    onAdFailed: (LoadAdError) -> Unit={}) {
@@ -275,17 +277,23 @@ fun ShowInterstitialAd(
     var showLoading by remember { mutableStateOf(true) }
 
     if(interConfig) {
-        // Show loading screen when ad is being loaded
-        if (showLoading) {
-            showAdloadingScreen(modifier.zIndex(1f))
-        }
-
-        LaunchedEffect(Unit) {
-            delay(3000)
-            showIntersialad(context) {
-                onDismissed()
-                showLoading = false
+        if (intersialAd != null && !isloading) {
+            // Show loading screen when ad is being loaded
+            if (showLoading) {
+                showAdloadingScreen(modifier.zIndex(1f))
             }
+
+            LaunchedEffect(Unit) {
+                delay(3000)
+                showIntersialad(context) {
+                    onDismissed()
+                    showLoading = false
+                }
+            }
+        }
+        else{
+            onDismissed()
+            showLoading = false
         }
     }
     else{
