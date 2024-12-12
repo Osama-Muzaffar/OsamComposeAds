@@ -20,7 +20,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import com.compose.osamcomposeads.Ads.MyNativeAdAdmobMedium
 import com.compose.osamcomposeads.Ads.OsamAdsHelper
 import com.compose.osamcomposeads.Ads.OsamNativeAdState
 import com.compose.osamcomposeads.Ads.ShowInterstitialAd
@@ -83,7 +82,7 @@ class MainActivity : ComponentActivity() {
 
 
                         Box(modifier = Modifier.wrapContentSize()){
-                            MyNativeAdAdmobMedium(loadedAd = adstate)
+//                            MyNativeAdAdmobMedium(loadedAd = adstate)
                         }
 
                     }
