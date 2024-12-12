@@ -92,6 +92,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation (libs.shimmer)
     implementation ("com.airbnb.android:lottie-compose:4.0.0")
+    implementation(libs.androidx.lifecycle.process)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

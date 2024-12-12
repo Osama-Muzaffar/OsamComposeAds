@@ -36,69 +36,91 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier,
-               onSecond: () -> Unit={}) {
-    val context= LocalContext.current
-    OsamAdsHelper.loadIntersialad(context,"ca-app-pub-3940256099942544/1033173712")
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    onSecond: () -> Unit = {}
+) {
+    val context = LocalContext.current
+    OsamAdsHelper.loadIntersialad(context, "ca-app-pub-3940256099942544/1033173712")
 
     val remoteConfigHelper = AdsConfigManager()
     remoteConfigHelper.initialize(R.xml.ads_remote_config, BuildConfig.DEBUG)
 
     LaunchedEffect(Unit) {
-    // Optionally, fetch and activate at startup using a coroutine:
-    CoroutineScope(Dispatchers.IO).launch {
-        remoteConfigHelper.fetchAndActivate()
-    }
+        // Optionally, fetch and activate at startup using a coroutine:
+        CoroutineScope(Dispatchers.IO).launch {
+            remoteConfigHelper.fetchAndActivate()
+        }
     }
     LaunchedEffect(Unit) {
         delay(2000)
-                if(cachedConfig!=null) {
-                    Log.d("HomeScreen", "remote banner value: " + cachedConfig?.test_banner)
-                    Log.d("HomeScreen", "remote native value: " + cachedConfig?.test_native)
-                    Log.d("HomeScreen", "remote Inter value: " + cachedConfig?.test_interstitial)
-                }
-                else{
-                    Log.d("HomeScreen", "cachedConfig is null")
-                }
+        if (cachedConfig != null) {
+            Log.d("HomeScreen", "remote banner value: " + cachedConfig?.test_banner)
+            Log.d("HomeScreen", "remote native value: " + cachedConfig?.test_native)
+            Log.d("HomeScreen", "remote Inter value: " + cachedConfig?.test_interstitial)
+        } else {
+            Log.d("HomeScreen", "cachedConfig is null")
+        }
 
     }
     Scaffold(modifier = Modifier.fillMaxSize(),
         bottomBar = {
-            val nativeAd= OsamNativeAdState(context = context,
-                adUnitId = "ca-app-pub-3940256099942544/2247696110")
+            val nativeConfig = if (cachedConfig != null) {
+                cachedConfig!!.test_native
+            } else {
+                true
+            }
+
+
+            val nativeAd = OsamNativeAdState(
+                context = context,
+                adUnitId = "ca-app-pub-3940256099942544/2247696110"
+            )
 
 
 //                        OsamAdmobBanner(bannerId = "ca-app-pub-3940256099942544/6300978111")
-            MyNativeAdAdmobSmall(loadedAd = nativeAd)
+            MyNativeAdAdmobSmall(loadedAd = nativeAd, nativeConfig = nativeConfig)
 
         }) { innerPadding ->
 
-        val nativeAd= OsamNativeAdState(context = context,
-            adUnitId = "ca-app-pub-3940256099942544/2247696110")
+        val nativeAd = OsamNativeAdState(
+            context = context,
+            adUnitId = "ca-app-pub-3940256099942544/2247696110"
+        )
 
         var shouldShowAd by remember { mutableStateOf(false) }
 
         if (shouldShowAd) {
-            ShowInterstitialAd(
-                context = context,
-                onDismissed = {
-                    shouldShowAd = false
-                    onSecond()
-                }
-            )
+            val interConfig = if (cachedConfig != null) {
+                cachedConfig!!.test_interstitial
+            } else {
+                true
+            }
+                    ShowInterstitialAd(
+                        context = context,
+                        onDismissed = {
+                            shouldShowAd = false
+                            onSecond()
+                        },
+                        interConfig= interConfig
+                    )
         }
 
 
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(innerPadding)) {
-            Box(modifier = Modifier.weight(1f)){
-                Column (Modifier.fillMaxSize(),
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
+            Box(modifier = Modifier.weight(1f)) {
+                Column(
+                    Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally){
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
 
                     Button(onClick = {
-                        shouldShowAd=true
+                        shouldShowAd = true
                     }) {
                         Text(text = "Show Intersital")
                     }

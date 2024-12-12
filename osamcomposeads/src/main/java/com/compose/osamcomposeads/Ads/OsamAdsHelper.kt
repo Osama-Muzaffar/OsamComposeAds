@@ -52,63 +52,66 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
 @Composable
-fun MyNativeAdAdmobSmall(modifier: Modifier = Modifier, loadedAd: NativeAd?) {
-    AndroidView(
-        modifier = modifier.padding(start = 4.dp, top = 8.dp, end = 4.dp, bottom = 4.dp),
-        factory = { context ->
-            // Inflate the layout
-            val inflater = LayoutInflater.from(context)
-            inflater.inflate(R.layout.custom_native_ad_small, null, false)
-        },
-        update = { rootView ->
-            Log.d("NativeSmall", "Native ad = "+loadedAd)
-            loadedAd?.let { nativeAd ->
-                val nativeAdView: NativeAdView = rootView.findViewById(R.id.nativeadview)
-                // Set icon
-                nativeAd.icon?.let { icon ->
-                    val adIcon: ImageView = rootView.findViewById(R.id.ad_icon)
-                    adIcon.setImageDrawable(icon.drawable)
-                    nativeAdView.iconView = adIcon
+fun MyNativeAdAdmobSmall(modifier: Modifier = Modifier, loadedAd: NativeAd?,
+                         nativeConfig: Boolean = true) {
+    if(nativeConfig) {
+        AndroidView(
+            modifier = modifier.padding(start = 4.dp, top = 8.dp, end = 4.dp, bottom = 4.dp),
+            factory = { context ->
+                // Inflate the layout
+                val inflater = LayoutInflater.from(context)
+                inflater.inflate(R.layout.custom_native_ad_small, null, false)
+            },
+            update = { rootView ->
+                Log.d("NativeSmall", "Native ad = " + loadedAd)
+                loadedAd?.let { nativeAd ->
+                    val nativeAdView: NativeAdView = rootView.findViewById(R.id.nativeadview)
+                    // Set icon
+                    nativeAd.icon?.let { icon ->
+                        val adIcon: ImageView = rootView.findViewById(R.id.ad_icon)
+                        adIcon.setImageDrawable(icon.drawable)
+                        nativeAdView.iconView = adIcon
+                    }
+
+                    // Set headline
+                    nativeAd.headline?.let { headline ->
+                        val adHeadline: TextView = rootView.findViewById(R.id.ad_headline)
+                        adHeadline.text = headline
+                        nativeAdView.headlineView = adHeadline
+                    }
+
+                    // Set advertiser
+                    nativeAd.advertiser?.let { advertiser ->
+                        val adAdvertiser: TextView = rootView.findViewById(R.id.ad_advertiser)
+                        adAdvertiser.text = advertiser
+                        nativeAdView.advertiserView = adAdvertiser
+                    }
+
+                    // Set body
+                    nativeAd.body?.let { body ->
+                        val adBody: TextView = rootView.findViewById(R.id.ad_body)
+                        adBody.text = body
+                        nativeAdView.bodyView = adBody
+                    }
+
+                    // Set call to action
+                    nativeAd.callToAction?.let { actionButton ->
+                        val adActionButton: Button = rootView.findViewById(R.id.ad_actionbutton)
+                        adActionButton.text = actionButton
+                        nativeAdView.callToActionView = adActionButton
+                    }
+
+                    // Hide shimmer frame
+                    val shimmerFrame: FrameLayout = rootView.findViewById(R.id.shimmerframe)
+                    shimmerFrame.visibility = View.GONE
+                    nativeAdView.visibility = View.VISIBLE
+
+                    // Set the native ad to the NativeAdView
+                    nativeAdView.setNativeAd(nativeAd)
                 }
-
-                // Set headline
-                nativeAd.headline?.let { headline ->
-                    val adHeadline: TextView = rootView.findViewById(R.id.ad_headline)
-                    adHeadline.text = headline
-                    nativeAdView.headlineView = adHeadline
-                }
-
-                // Set advertiser
-                nativeAd.advertiser?.let { advertiser ->
-                    val adAdvertiser: TextView = rootView.findViewById(R.id.ad_advertiser)
-                    adAdvertiser.text = advertiser
-                    nativeAdView.advertiserView = adAdvertiser
-                }
-
-                // Set body
-                nativeAd.body?.let { body ->
-                    val adBody: TextView = rootView.findViewById(R.id.ad_body)
-                    adBody.text = body
-                    nativeAdView.bodyView = adBody
-                }
-
-                // Set call to action
-                nativeAd.callToAction?.let { actionButton ->
-                    val adActionButton: Button = rootView.findViewById(R.id.ad_actionbutton)
-                    adActionButton.text = actionButton
-                    nativeAdView.callToActionView = adActionButton
-                }
-
-                // Hide shimmer frame
-                val shimmerFrame: FrameLayout = rootView.findViewById(R.id.shimmerframe)
-                shimmerFrame.visibility = View.GONE
-                nativeAdView.visibility = View.VISIBLE
-
-                // Set the native ad to the NativeAdView
-                nativeAdView.setNativeAd(nativeAd)
             }
-        }
-    )
+        )
+    }
 }
 
 
@@ -266,21 +269,28 @@ public class OsamAdsHelper{
 fun ShowInterstitialAd(
     modifier: Modifier = Modifier,
     context: Context,
-    onDismissed: () -> Unit = {}
+    onDismissed: () -> Unit = {},
+    interConfig: Boolean = true
 ) {
     var showLoading by remember { mutableStateOf(true) }
 
-    // Show loading screen when ad is being loaded
-    if (showLoading) {
-        showAdloadingScreen(modifier.zIndex(1f))
-    }
-
-    LaunchedEffect(Unit) {
-        delay(3000)
-        showIntersialad(context) {
-            onDismissed()
-            showLoading = false
+    if(interConfig) {
+        // Show loading screen when ad is being loaded
+        if (showLoading) {
+            showAdloadingScreen(modifier.zIndex(1f))
         }
+
+        LaunchedEffect(Unit) {
+            delay(3000)
+            showIntersialad(context) {
+                onDismissed()
+                showLoading = false
+            }
+        }
+    }
+    else{
+        onDismissed()
+        showLoading = false
     }
 }
 
