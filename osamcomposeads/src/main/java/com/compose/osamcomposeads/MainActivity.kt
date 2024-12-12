@@ -1,8 +1,6 @@
 package com.compose.osamcomposeads
 
 import android.os.Bundle
-import android.os.Handler
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -15,7 +13,6 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,13 +20,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import com.compose.osamcomposeads.Ads.MyNativeAdAdmobSmall
-import com.compose.osamcomposeads.Ads.OsamAdmobBanner
+import com.compose.osamcomposeads.Ads.MyNativeAdAdmobMedium
 import com.compose.osamcomposeads.Ads.OsamAdsHelper
 import com.compose.osamcomposeads.Ads.OsamNativeAdState
 import com.compose.osamcomposeads.Ads.ShowInterstitialAd
 import com.compose.osamcomposeads.ui.theme.ComposeAdsTheme
-import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
 
@@ -88,7 +83,7 @@ class MainActivity : ComponentActivity() {
 
 
                         Box(modifier = Modifier.wrapContentSize()){
-                            MyNativeAdAdmobSmall(loadedAd = adstate)
+                            MyNativeAdAdmobMedium(loadedAd = adstate)
                         }
 
                     }
