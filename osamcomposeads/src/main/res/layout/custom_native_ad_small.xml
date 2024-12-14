@@ -17,6 +17,7 @@
             android:id="@+id/shimmerframe"
             android:layout_width="match_parent"
             app:shimmer_auto_start="true"
+            android:visibility="visible"
             android:layout_height="wrap_content">
 
 

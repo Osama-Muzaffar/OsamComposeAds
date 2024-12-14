@@ -5,6 +5,7 @@ import android.content.res.Resources
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.View
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -24,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
@@ -95,6 +97,7 @@ fun AdmobBanner(modifier: Modifier = Modifier,
 }
 */
 
+/*
 @Composable
 fun OsamAdmobBanner(
     modifier: Modifier = Modifier,
@@ -152,6 +155,71 @@ fun OsamAdmobBanner(
                 update = { adView ->
                     adView.visibility =
                         if (isBannerLoaded) android.view.View.VISIBLE else android.view.View.GONE
+                }
+            )
+        }
+    }
+}
+*/
+
+@Composable
+fun OsamAdmobBanner(
+    modifier: Modifier = Modifier,
+    bannerId: String,
+    onAdLoaded: () -> Unit = { },
+    onAdFailedToLoad: (LoadAdError) -> Unit = { },
+    remoteKey: Boolean = true
+) {
+    var isBannerLoaded by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    val configuration = LocalConfiguration.current
+
+    // Use Jetpack Compose's LocalConfiguration to get screen width in DP
+    val screenWidthDp = configuration.screenWidthDp
+
+    // Obtain anchored adaptive banner size using the official method
+    val adaptiveAdSize = remember(screenWidthDp) {
+        AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(context, screenWidthDp)
+    }
+
+    if (remoteKey) {
+        Box(
+            modifier = modifier
+                .fillMaxWidth()
+                // Height of the banner in DP as reported by AdSize
+                .height(adaptiveAdSize.height.dp)
+        ) {
+            if (!isBannerLoaded) {
+                ShimmerBox(
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+
+            AndroidView(
+                modifier = Modifier.fillMaxSize(),
+                factory = { ctx ->
+                    AdView(ctx).apply {
+                        setAdSize(adaptiveAdSize)
+                        adUnitId = bannerId
+                        adListener = object : AdListener() {
+                            override fun onAdLoaded() {
+                                Log.d("tagBannerAd", "onAdLoaded")
+                                onAdLoaded()
+                                Handler(Looper.getMainLooper()).post {
+                                    isBannerLoaded = true
+                                }
+                            }
+
+                            override fun onAdFailedToLoad(error: LoadAdError) {
+                                Log.d("tagBannerAd", "onAdFailedToLoad: $error")
+                                onAdFailedToLoad(error)
+                            }
+                        }
+                        loadAd(AdRequest.Builder().build())
+                    }
+                },
+                update = { adView ->
+                    adView.visibility = if (isBannerLoaded) View.VISIBLE else View.GONE
                 }
             )
         }

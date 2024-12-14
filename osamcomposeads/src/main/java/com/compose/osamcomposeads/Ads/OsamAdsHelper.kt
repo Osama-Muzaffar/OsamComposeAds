@@ -58,7 +58,7 @@ fun MyNativeAdAdmobSmall(modifier: Modifier = Modifier, loadedAd: NativeAd?,
                          nativeConfig: Boolean = true) {
     if(nativeConfig) {
         AndroidView(
-            modifier = modifier.padding(start = 4.dp, top = 8.dp, end = 4.dp, bottom = 4.dp),
+            modifier = modifier.padding(start = 4.dp, top = 4.dp, end = 4.dp, bottom = 4.dp),
             factory = { context ->
                 // Inflate the layout
                 val inflater = LayoutInflater.from(context)
