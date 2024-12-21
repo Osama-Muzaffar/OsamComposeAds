@@ -240,12 +240,14 @@ public class OsamAdsHelper{
                 intersialAd!!.fullScreenContentCallback = object : FullScreenContentCallback() {
                     override fun onAdDismissedFullScreenContent() {
                         // This is called when the ad is dismissed
+                        Log.d("showIntersialad", "full screen content dismissed")
                         intersialAd = null
                         onDismissed()
                     }
 
                     override fun onAdFailedToShowFullScreenContent(adError: com.google.android.gms.ads.AdError) {
                         // Handle the failure by calling onAdDismissed to proceed with normal operation
+                        Log.d("showIntersialad", "full screen failed to show")
                         intersialAd = null
                         onDismissed()
                         onAdFailed(adError)
