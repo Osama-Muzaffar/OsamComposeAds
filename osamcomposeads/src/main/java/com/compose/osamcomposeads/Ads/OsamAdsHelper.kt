@@ -269,6 +269,8 @@ public class OsamAdsHelper{
     }
 
 }
+
+
 @Composable
 fun ShowInterstitialAd(
     modifier: Modifier = Modifier,
@@ -277,28 +279,45 @@ fun ShowInterstitialAd(
     interConfig: Boolean = true
 ) {
     var showLoading by remember { mutableStateOf(true) }
+    var adShowingSuccessfully by remember { mutableStateOf(false) }
 
+//    var adShowingSuccessfully = false
     if(interConfig) {
+        Log.d("showIntersialad", "intersialAd = "+intersialAd)
+        Log.d("showIntersialad", "isloading = "+isloading)
+
         if (intersialAd != null && !isloading) {
             // Show loading screen when ad is being loaded
             if (showLoading) {
                 showAdloadingScreen(modifier.zIndex(1f))
             }
-
+            adShowingSuccessfully=true
             LaunchedEffect(Unit) {
                 delay(3000)
-                showIntersialad(context) {
-                    onDismissed()
-                    showLoading = false
-                }
+                showIntersialad(context,
+                    onDismissed= {
+                        Log.d("showIntersialad", "on ad Dismissed")
+                        onDismissed()
+                        showLoading = false
+                    },
+                    onAdFailed = {
+                        Log.d("showIntersialad", "on ad Failed")
+                        onDismissed()
+                        showLoading = false
+                    })
             }
         }
         else{
-            onDismissed()
-            showLoading = false
+            if(!adShowingSuccessfully) {
+                Log.d("showIntersialad", "botn conditions are false")
+                onDismissed()
+                showLoading = false
+            }
         }
     }
     else{
+        Log.d("showIntersialad", "remote config is  false")
+
         onDismissed()
         showLoading = false
     }
@@ -306,12 +325,14 @@ fun ShowInterstitialAd(
 
 @Composable
 fun showAdloadingScreen(modifier: Modifier = Modifier) {
-    Box(modifier = modifier.fillMaxSize()
+    Box(modifier = modifier
+        .fillMaxSize()
         .background(MaterialTheme.colorScheme.background)
         .shadow(elevation = 8.dp)
         .zIndex(1f))
     {
-        Column(modifier = Modifier.align(Alignment.Center)
+        Column(modifier = Modifier
+            .align(Alignment.Center)
             .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center) {

@@ -96,6 +96,7 @@ fun HomeScreen(
             } else {
                 true
             }
+            Log.d("showIntersialad", "call intersitial method")
                     ShowInterstitialAd(
                         context = context,
                         onDismissed = {
